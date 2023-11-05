@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import os
 import asyncio
-
+from colorama import Fore
 bot = commands.Bot(command_prefix=".",self_bot=True)
 
 @bot.event
@@ -18,13 +18,22 @@ async def on_ready():
 
 
 
-    cloneguildid = int(input("\nWhich Guild You Want To Clone Guild Id : "))
-    ownguildid = int(input("Where You Want To Clone Guild Id : "))
+    cloneguildid = int(input(f"\n {Fore.LIGHTYELLOW_EX}Which Guild You Want To Clone Guild Id : "))
+    
  
     cloneguild = bot.get_guild(cloneguildid)
+    
+    if cloneguild == None: 
+        print(f"{Fore.LIGHTRED_EX} Clone Guild Id Incorrect")
+        return
+    
+    ownguildid = int(input(f"Where You Want To Clone Guild Id : "))
     ownguild = bot.get_guild(ownguildid)
-    print(cloneguild.name)
-    print(ownguild.name)
+    if (ownguild == None):
+         print(f"{Fore.LIGHTRED_EX} Cloned Guild Id Incorrect")
+         return
+    print(f"{Fore.LIGHTBLUE_EX}{cloneguild.name}")
+    print(f"{ownguild.name}")
 
     if ownguild.roles:
 
@@ -42,7 +51,10 @@ async def on_ready():
 
     if ownguild.channels:
         for channel in ownguild.channels:
-            await channel.delete()
+            try:
+                await channel.delete()
+            except Exception as e:
+                 print('e')
             # await asyncio.sleep(1)
 
 
@@ -74,18 +86,18 @@ async def on_ready():
             await role.delete()
             
 
-    rolename = ", ".join([role.name for role in roles.values()])
-    categoryname = ", ".join([category.name for category in ownguild.categories])
-    channelname = ", ".join([channelss.name for channelss in ownguild.text_channels])
+    rolename = "\n ".join([role.name for role in roles.values()])
+    categoryname = "\n ".join([category.name for category in ownguild.categories])
+    channelname = "\n ".join([channelss.name for channelss in ownguild.text_channels])
 
 
-    print(f"roles : {rolename}")
-    print(f"category : {categoryname}")
-    print(f"channel : {channelname}")
+    print(f"{Fore.LIGHTBLUE_EX} roles : {rolename}")
+    print(f"\n\n{Fore.LIGHTCYAN_EX} category : {categoryname}")
+    print(f"\n\n{Fore.LIGHTRED_EX} channel : {channelname}")
   
     
 
 
 
 
-bot.run("token here",bot=False)
+bot.run("your token",bot=False)
